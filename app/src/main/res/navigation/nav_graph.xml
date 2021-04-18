@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto" android:id="@+id/nav_graph"
+    app:startDestination="@id/recipes_list_fragment">
+
+    <fragment
+        android:id="@+id/recipes_list_fragment"
+        android:name="com.example.recipesapp.presentation.ui.recipeslist.RecipeListFragment"
+        android:label="@string/recipes_list_fragment"
+        tools:layout="@layout/recipes_list_fragment">
+        <action
+            android:id="@+id/action_recipes_list_fragment_to_recipe_details_fragment"
+            app:destination="@id/recipe_details_fragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/recipe_details_fragment"
+        android:name="com.example.recipesapp.presentation.ui.recipedetails.RecipeDetailsFragment"
+        tools:layout="@layout/recipe_details_fragment">
+        <action
+            android:id="@+id/action_recipe_details_fragment_to_recipes_list_fragment"
+            app:destination="@id/recipes_list_fragment" />
+
+        <argument
+            android:name="recipeUuid"
+            app:argType="string"/>
+        <action
+            android:id="@+id/action_recipe_details_fragment_self"
+            app:destination="@id/recipe_details_fragment" />
+        <action
+            android:id="@+id/action_recipe_details_fragment_to_recipe_image_download"
+            app:destination="@id/recipe_image_download" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/recipe_image_download"
+        android:name="com.example.recipesapp.presentation.ui.downloadimage.DownloadImageFragment"
+        tools:layout="@layout/image_download_fragment">
+        <argument
+            android:name="image"
+            app:argType="string"/>
+        <action
+            android:id="@+id/action_recipe_image_download_to_recipe_details_fragment"
+            app:destination="@id/recipe_details_fragment" />
+
+    </fragment>
+
+    <dialog
+        android:id="@+id/bottomSheetFragment"
+        android:name="com.example.recipesapp.presentation.ui.recipeslist.BottomSheetFragment"
+        android:label="bottom_sheet_fragment"
+        tools:layout="@layout/bottom_sheet">
+        <action
+            android:id="@+id/action_bottomSheetFragment_to_recipes_list_fragment"
+            app:destination="@id/recipes_list_fragment" />
+    </dialog>
+
+</navigation>
