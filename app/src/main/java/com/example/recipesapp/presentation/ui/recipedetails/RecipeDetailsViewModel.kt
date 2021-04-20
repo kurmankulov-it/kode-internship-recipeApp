@@ -1,7 +1,7 @@
 package com.example.recipesapp.presentation.ui.recipedetails
 
 import androidx.lifecycle.*
-import com.example.recipesapp.domain.interaction.recipe.GetRecipeByUuidUseCase
+import com.example.recipesapp.domain.interaction.recipe.GetRecipeByUuidInteractor
 import com.example.recipesapp.domain.interaction.recipe.RefreshRecipeDetailsUseCase
 import com.example.recipesapp.domain.model.RecipeDetails
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -15,7 +15,7 @@ import javax.inject.Inject
 @ExperimentalCoroutinesApi
 class RecipeDetailsViewModel @Inject constructor(
         private val refreshRecipeDetailsUseCase: RefreshRecipeDetailsUseCase,
-        private val getRecipeByUuidUseCase: GetRecipeByUuidUseCase
+        private val getRecipeByUuidInteractor: GetRecipeByUuidInteractor
 ) : ViewModel() {
     private val _isExist : MutableLiveData<Boolean> = MutableLiveData(false)
     val isExist : LiveData<Boolean> get() = _isExist
@@ -32,7 +32,7 @@ class RecipeDetailsViewModel @Inject constructor(
             try {
                 refreshRecipeDetailsUseCase.refresh(uuid)
             } catch (networkError: IOException) {}
-            getRecipeByUuidUseCase.exists(uuid).collect {
+            getRecipeByUuidInteractor.exists(uuid).collect {
                 _isExist.value = it
             }
         }
@@ -40,7 +40,7 @@ class RecipeDetailsViewModel @Inject constructor(
 
     fun getRecipe(uuid: String) {
         viewModelScope.launch {
-            getRecipeByUuidUseCase.get(uuid).collect {
+            getRecipeByUuidInteractor.get(uuid).collect {
                 _recipe.value = it
             }
         }

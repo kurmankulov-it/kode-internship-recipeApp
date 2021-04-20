@@ -50,7 +50,7 @@ object InteractionModule {
 
     @Singleton
     @Provides
-    fun provideGetRecipeByUuidUseCase(recipeRepository: RecipeRepository): GetRecipeByUuidUseCase {
-        return GetRecipeByUuidUseCase(recipeRepository)
+    fun provideGetRecipeByUuidUseCase(recipeRepository: RecipeRepository): GetRecipeByUuidInteractor {
+        return GetRecipeByUuidInteractor(recipeRepository)
     }
 }

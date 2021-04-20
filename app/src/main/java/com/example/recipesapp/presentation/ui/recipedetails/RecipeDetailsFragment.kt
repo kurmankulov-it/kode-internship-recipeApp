@@ -41,16 +41,15 @@ class RecipeDetailsFragment : Fragment() {
         binding.recipeDetailsBrief.adapter = recipeBriefAdapter
         binding.recipeDetailsBrief.layoutManager = mLayoutManager
 
-        viewModel.isExist.observe(viewLifecycleOwner, {
-            if (it)
-            {
+        viewModel.isExist.observe(viewLifecycleOwner, { isExist ->
+            if (isExist) {
                 viewModel.getRecipe(args.recipeUuid)
                 binding.recipeDetailsProgressBar.visibility = View.GONE
             }
         })
 
-        viewModel.recipe.observe(viewLifecycleOwner, {
-            it?.let {
+        viewModel.recipe.observe(viewLifecycleOwner, { recipe ->
+            recipe?.let {
                 binding.recipeDetailImages.setImageList(loadImagesToSlider(it.images!!))
                 binding.recipeDetailImages.setItemClickListener(object : ItemClickListener {
                     override fun onItemSelected(position: Int) {
