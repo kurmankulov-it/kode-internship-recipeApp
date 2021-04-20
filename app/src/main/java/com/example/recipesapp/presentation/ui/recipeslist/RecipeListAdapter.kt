@@ -8,10 +8,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.recipesapp.databinding.RecipeItemBinding
 import com.example.recipesapp.domain.model.Recipe
+import com.example.recipesapp.util.DATE_PATTERN
 import java.text.SimpleDateFormat
 import java.util.*
 
-class RecipeListAdapter(private val recipeClickCallBack: (Recipe) -> Unit) : RecyclerView.Adapter<RecipeListAdapter.RecipeListViewHolder>() {
+class RecipeListAdapter(private val recipeClickCallBack: (Recipe) -> Unit) :
+        RecyclerView.Adapter<RecipeListAdapter.RecipeListViewHolder>() {
     var recipes: List<Recipe> = emptyList()
         set(value) {
             field = value
@@ -37,28 +39,27 @@ class RecipeListAdapter(private val recipeClickCallBack: (Recipe) -> Unit) : Rec
     }
 
     class RecipeListViewHolder(viewBinding: RecipeItemBinding) :
-        RecyclerView.ViewHolder(viewBinding.root) {
+            RecyclerView.ViewHolder(viewBinding.root) {
         private val recipeName: TextView = viewBinding.recipeName
         private val recipeDescription: TextView = viewBinding.recipeDescription
         private val recipeLastUpdate: TextView = viewBinding.recipeLastUpdate
         private val recipeImage: ImageView = viewBinding.recipeImage
 
-        fun bind(item: Recipe)
-        {
+        fun bind(item: Recipe) {
             recipeName.text = item.name
             recipeDescription.text = item.description
-            recipeLastUpdate.text = SimpleDateFormat("DD.MM.yyyy", Locale.getDefault()).format(item.lastUpdated)
+            recipeLastUpdate.text = SimpleDateFormat(DATE_PATTERN, Locale.getDefault()).format(item.lastUpdated)
             Glide.with(itemView)
-                .load(item.images?.first())
-                .into(recipeImage)
+                    .load(item.images?.first())
+                    .into(recipeImage)
         }
 
         companion object {
             fun from(parent: ViewGroup): RecipeListViewHolder {
                 val view: RecipeItemBinding = RecipeItemBinding.inflate(
-                    LayoutInflater.from(parent.context),
-                    parent,
-                    false
+                        LayoutInflater.from(parent.context),
+                        parent,
+                        false
                 )
 
                 return RecipeListViewHolder(view)

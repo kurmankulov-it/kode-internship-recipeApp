@@ -11,7 +11,7 @@ data class RecipeDetailsEntity constructor(
         @NonNull
         val uuid: String,
         val name: String,
-        val images: List<String>?,
+        val images: List<String>,
         val lastUpdated: Int,
         val description: String?,
         val instructions: String,
@@ -26,13 +26,13 @@ data class RecipeBrief constructor(
 )
 
 fun RecipeDetailsEntity.asDomainModel(): RecipeDetails {
-        return RecipeDetails(
-                name = name,
-                images = images,
-                lastUpdated = lastUpdated,
-                description = description,
-                instructions = instructions,
-                difficulty = difficulty,
-                similar = similar
-        )
+    return RecipeDetails(
+            name = name,
+            images = images,
+            lastUpdated = lastUpdated,
+            description = description,
+            instructions = instructions,
+            difficulty = difficulty,
+            similar = similar
+    )
 }

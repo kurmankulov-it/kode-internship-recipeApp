@@ -26,46 +26,43 @@ import java.io.FileOutputStream
 import java.io.OutputStream
 import java.lang.Exception
 
-
 class DownloadImageFragment : Fragment() {
+
     private val args by navArgs<DownloadImageFragmentArgs>()
 
-    private var _binding: ImageDownloadFragmentBinding? = null
-    private val binding get() = _binding!!
-
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View {
         setHasOptionsMenu(true)
-        _binding = ImageDownloadFragmentBinding.inflate(inflater, container, false)
+        val binding = ImageDownloadFragmentBinding.inflate(inflater, container, false)
         (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         Glide.with(this)
-            .load(args.image)
-            .listener(object : RequestListener<Drawable> {
-                override fun onLoadFailed(
-                    e: GlideException?,
-                    model: Any?,
-                    target: Target<Drawable>?,
-                    isFirstResource: Boolean
-                ): Boolean {
-                    return false
-                }
+                .load(args.image)
+                .listener(object : RequestListener<Drawable> {
+                    override fun onLoadFailed(
+                            e: GlideException?,
+                            model: Any?,
+                            target: Target<Drawable>?,
+                            isFirstResource: Boolean
+                    ): Boolean {
+                        return false
+                    }
 
-                override fun onResourceReady(
-                    resource: Drawable?,
-                    model: Any?,
-                    target: Target<Drawable>?,
-                    dataSource: DataSource?,
-                    isFirstResource: Boolean
-                ): Boolean {
-                    binding.recipeDetailsProgressBar.visibility = View.GONE
-                    return false
-                }
-            })
-            .into(binding.recipeImageDownload)
+                    override fun onResourceReady(
+                            resource: Drawable?,
+                            model: Any?,
+                            target: Target<Drawable>?,
+                            dataSource: DataSource?,
+                            isFirstResource: Boolean
+                    ): Boolean {
+                        binding.recipeDetailsProgressBar.visibility = View.GONE
+                        return false
+                    }
+                })
+                .into(binding.recipeImageDownload)
 
         val dir = File(Environment.DIRECTORY_PICTURES)
         if (!dir.exists()) {
@@ -81,10 +78,10 @@ class DownloadImageFragment : Fragment() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when(item.itemId) {
+        when (item.itemId) {
             R.id.action_download_image -> {
                 if (checkSelfPermission(requireContext(), android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                    != PackageManager.PERMISSION_GRANTED) {
+                        != PackageManager.PERMISSION_GRANTED) {
                     ActivityCompat.requestPermissions(requireActivity(), arrayOf(android.Manifest.permission.WRITE_EXTERNAL_STORAGE), 1)
                 } else {
                     saveImage()
@@ -95,9 +92,9 @@ class DownloadImageFragment : Fragment() {
     }
 
     override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
+            requestCode: Int,
+            permissions: Array<out String>,
+            grantResults: IntArray
     ) {
         if (requestCode != 1)
             return
@@ -106,8 +103,8 @@ class DownloadImageFragment : Fragment() {
         }
     }
 
-    private fun saveImage()
-    {
+    private fun saveImage() {
+        val binding = ImageDownloadFragmentBinding.bind(requireView())
         val directory = requireContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES).toString()
         val dirFile = File(directory)
         dirFile.mkdirs()

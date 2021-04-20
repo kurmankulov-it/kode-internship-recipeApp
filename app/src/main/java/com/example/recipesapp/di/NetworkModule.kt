@@ -18,8 +18,8 @@ object NetworkModule {
     @Provides
     fun provideRecipeApi(): RecipeApi {
         return Retrofit.Builder()
-            .baseUrl("https://test.kode-t.ru/")
-            .addConverterFactory(GsonConverterFactory.create(GsonBuilder().create()))
-            .build().create(RecipeApi::class.java)
+                .baseUrl("https://test.kode-t.ru/")
+                .addConverterFactory(GsonConverterFactory.create(GsonBuilder().create()))
+                .build().create(RecipeApi::class.java)
     }
 }

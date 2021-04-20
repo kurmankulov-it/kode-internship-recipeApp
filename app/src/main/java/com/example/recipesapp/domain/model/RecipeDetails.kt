@@ -4,7 +4,7 @@ import com.example.recipesapp.data.database.entities.RecipeBrief
 
 data class RecipeDetails(
         val name: String,
-        val images: List<String>?,
+        val images: List<String>,
         val lastUpdated: Int,
         val description: String?,
         val instructions: String,

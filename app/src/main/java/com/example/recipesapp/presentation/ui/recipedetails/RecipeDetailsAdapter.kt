@@ -9,7 +9,8 @@ import com.bumptech.glide.Glide
 import com.example.recipesapp.data.database.entities.RecipeBrief
 import com.example.recipesapp.databinding.RecipeDetailsBriefItemBinding
 
-class RecipeDetailsAdapter(private val recipeBriefClickCallBack: (RecipeBrief) -> Unit) : RecyclerView.Adapter<RecipeDetailsAdapter.RecipeDetailsViewHolder>() {
+class RecipeDetailsAdapter(private val recipeBriefClickCallBack: (RecipeBrief) -> Unit) :
+        RecyclerView.Adapter<RecipeDetailsAdapter.RecipeDetailsViewHolder>() {
 
     var briefs: List<RecipeBrief> = emptyList()
         set(value) {
@@ -37,27 +38,26 @@ class RecipeDetailsAdapter(private val recipeBriefClickCallBack: (RecipeBrief) -
     }
 
     class RecipeDetailsViewHolder(viewBinding: RecipeDetailsBriefItemBinding) :
-        RecyclerView.ViewHolder(viewBinding.root) {
-            private val recipeBriefName: TextView = viewBinding.recipeBriefName
-            private val recipeBriefImage: ImageView = viewBinding.recipeBriefImage
+            RecyclerView.ViewHolder(viewBinding.root) {
+        private val recipeBriefName: TextView = viewBinding.recipeBriefName
+        private val recipeBriefImage: ImageView = viewBinding.recipeBriefImage
 
-            fun bind(brief: RecipeBrief)
-            {
-                recipeBriefName.text = brief.name
-                Glide.with(itemView)
+        fun bind(brief: RecipeBrief) {
+            recipeBriefName.text = brief.name
+            Glide.with(itemView)
                     .load(brief.image)
                     .into(recipeBriefImage)
-            }
+        }
 
-            companion object {
-                fun from(parent: ViewGroup): RecipeDetailsViewHolder {
-                    val view: RecipeDetailsBriefItemBinding = RecipeDetailsBriefItemBinding.inflate(
+        companion object {
+            fun from(parent: ViewGroup): RecipeDetailsViewHolder {
+                val view: RecipeDetailsBriefItemBinding = RecipeDetailsBriefItemBinding.inflate(
                         LayoutInflater.from(parent.context),
                         parent,
                         false
-                    )
-                    return RecipeDetailsViewHolder(view)
-                }
+                )
+                return RecipeDetailsViewHolder(view)
             }
         }
+    }
 }

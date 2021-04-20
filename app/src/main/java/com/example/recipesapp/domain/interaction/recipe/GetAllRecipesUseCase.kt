@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.*
 import javax.inject.Inject
 
 class GetAllRecipesUseCase @Inject constructor(
-    private val recipeRepository: RecipeRepository
+        private val recipeRepository: RecipeRepository
 ) {
     fun getAll(): Flow<List<Recipe>> = recipeRepository.getAllRecipes().map {
         it.asDomainModel()

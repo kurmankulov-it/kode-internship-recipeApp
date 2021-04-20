@@ -18,20 +18,17 @@ class RecipeListFragment : Fragment() {
 
     private val viewModel: RecipeListViewModel by activityViewModels()
 
-    private var _binding: RecipesListFragmentBinding? = null
-    private val binding get() = _binding!!
-
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View {
         setHasOptionsMenu(true)
-        _binding = RecipesListFragmentBinding.inflate(inflater, container, false)
+        val binding = RecipesListFragmentBinding.inflate(inflater, container, false)
 
         val recipeListAdapter = RecipeListAdapter {
             val action =
-                RecipeListFragmentDirections.actionRecipesListFragmentToRecipeDetailsFragment(it.uuid)
+                    RecipeListFragmentDirections.actionRecipesListFragmentToRecipeDetailsFragment(it.uuid)
             findNavController().navigate(action)
         }
         binding.recyclerViewRecipeList.adapter = recipeListAdapter
@@ -41,6 +38,7 @@ class RecipeListFragment : Fragment() {
                 binding.recipesListProgressBar.visibility = View.GONE
             }
         })
+
         viewModel.recipes.observe(viewLifecycleOwner, { recipes ->
             recipeListAdapter.recipes = recipes
         })
@@ -56,8 +54,7 @@ class RecipeListFragment : Fragment() {
 
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextChange(newText: String?): Boolean {
-                if (!newText.isNullOrEmpty())
-                {
+                if (!newText.isNullOrEmpty()) {
                     viewModel.getRecipesWithSearch(newText)
                 }
                 return false
@@ -65,9 +62,8 @@ class RecipeListFragment : Fragment() {
 
             override fun onQueryTextSubmit(query: String?): Boolean {
                 searchView.clearFocus()
-                if (!query.isNullOrEmpty())
-                {
-                   viewModel.getRecipesWithSearch(query)
+                if (!query.isNullOrEmpty()) {
+                    viewModel.getRecipesWithSearch(query)
                 }
                 return false
             }
@@ -80,17 +76,12 @@ class RecipeListFragment : Fragment() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when(item.itemId) {
+        when (item.itemId) {
             R.id.action_sorts -> {
                 val bottomSheetFragment = BottomSheetFragment()
                 bottomSheetFragment.show(requireActivity().supportFragmentManager, "BottomSheet")
             }
         }
         return true
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 }

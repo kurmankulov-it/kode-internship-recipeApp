@@ -14,6 +14,7 @@ import com.denzcoskun.imageslider.constants.ScaleTypes
 import com.denzcoskun.imageslider.interfaces.ItemClickListener
 import com.denzcoskun.imageslider.models.SlideModel
 import com.example.recipesapp.databinding.RecipeDetailsFragmentBinding
+import com.example.recipesapp.util.DATE_PATTERN
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import java.text.SimpleDateFormat
@@ -23,14 +24,13 @@ import kotlin.collections.ArrayList
 @ExperimentalCoroutinesApi
 @AndroidEntryPoint
 class RecipeDetailsFragment : Fragment() {
+
     private val args by navArgs<RecipeDetailsFragmentArgs>()
+
     private val viewModel: RecipeDetailsViewModel by viewModels()
 
-    private var _binding: RecipeDetailsFragmentBinding? = null
-    private val binding get() = _binding!!
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        _binding = RecipeDetailsFragmentBinding.inflate(inflater, container, false)
+        val binding = RecipeDetailsFragmentBinding.inflate(inflater, container, false)
 
         val recipeBriefAdapter = RecipeDetailsAdapter {
             val action = RecipeDetailsFragmentDirections.actionRecipeDetailsFragmentSelf(it.uuid)
@@ -50,7 +50,7 @@ class RecipeDetailsFragment : Fragment() {
 
         viewModel.recipe.observe(viewLifecycleOwner, { recipe ->
             recipe?.let {
-                binding.recipeDetailImages.setImageList(loadImagesToSlider(it.images!!))
+                binding.recipeDetailImages.setImageList(loadImagesToSlider(it.images))
                 binding.recipeDetailImages.setItemClickListener(object : ItemClickListener {
                     override fun onItemSelected(position: Int) {
                         val action = RecipeDetailsFragmentDirections.actionRecipeDetailsFragmentToRecipeImageDownload(it.images[position])
@@ -58,7 +58,7 @@ class RecipeDetailsFragment : Fragment() {
                     }
                 })
                 binding.recipeDetailName.text = it.name
-                binding.recipeDetailLastUpdate.text = SimpleDateFormat("DD.MM.yyyy", Locale.getDefault()).format(it.lastUpdated)
+                binding.recipeDetailLastUpdate.text = SimpleDateFormat(DATE_PATTERN, Locale.getDefault()).format(it.lastUpdated)
                 binding.recipeDetailDescription.text = it.description
                 binding.recipeDetailDifficulty.rating = it.difficulty.toFloat()
                 binding.recipeDetailInstruction.text = Html.fromHtml(it.instructions)
@@ -70,8 +70,7 @@ class RecipeDetailsFragment : Fragment() {
         return binding.root
     }
 
-    private fun loadImagesToSlider(images: List<String>): List<SlideModel>
-    {
+    private fun loadImagesToSlider(images: List<String>): List<SlideModel> {
         val slideModels = ArrayList<SlideModel>()
         images.forEach {
             slideModels.add(SlideModel(it, ScaleTypes.CENTER_CROP))

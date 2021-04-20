@@ -14,14 +14,15 @@ import javax.inject.Inject
 @HiltViewModel
 @ExperimentalCoroutinesApi
 class RecipeListViewModel @Inject constructor(
-    private val getAllRecipesUseCase: GetAllRecipesUseCase,
-    private val refreshRecipesUseCase: RefreshRecipesUseCase,
-    private val getRecipesWithSearchUseCase: GetRecipesWithSearchUseCase,
-    private val getAllRecipesByNameUseCase: GetAllRecipesByNameUseCase,
-    private val getAllRecipesByLastUpdateUseCase: GetAllRecipesByLastUpdateUseCase
+        private val getAllRecipesUseCase: GetAllRecipesUseCase,
+        private val refreshRecipesUseCase: RefreshRecipesUseCase,
+        private val getRecipesWithSearchUseCase: GetRecipesWithSearchUseCase,
+        private val getAllRecipesByNameUseCase: GetAllRecipesByNameUseCase,
+        private val getAllRecipesByLastUpdateUseCase: GetAllRecipesByLastUpdateUseCase
 ) : ViewModel() {
 
     private val _recipes: MutableLiveData<List<Recipe>> = MutableLiveData()
+
     val recipes: LiveData<List<Recipe>> get() = _recipes
 
     val isLoaded: MutableLiveData<Boolean> = MutableLiveData(false)
