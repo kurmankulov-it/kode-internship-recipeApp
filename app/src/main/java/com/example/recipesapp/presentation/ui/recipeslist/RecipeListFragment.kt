@@ -5,7 +5,6 @@ import android.view.*
 import android.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.recipesapp.R
 import com.example.recipesapp.databinding.RecipesListFragmentBinding
@@ -37,18 +36,13 @@ class RecipeListFragment : Fragment() {
         }
         binding.recyclerViewRecipeList.adapter = recipeListAdapter
 
-        viewModel.isLoaded.observe(viewLifecycleOwner, {
-            it?.let {
-                when (it) {
-                    true ->
-                        binding.recipesListProgressBar.visibility = View.GONE
-                }
+        viewModel.isLoaded.observe(viewLifecycleOwner, { isLoaded ->
+            if (isLoaded) {
+                binding.recipesListProgressBar.visibility = View.GONE
             }
         })
-        viewModel.recipes.observe(viewLifecycleOwner, {
-            it?.let {
-                recipeListAdapter.recipes = it
-            }
+        viewModel.recipes.observe(viewLifecycleOwner, { recipes ->
+            recipeListAdapter.recipes = recipes
         })
 
         return binding.root

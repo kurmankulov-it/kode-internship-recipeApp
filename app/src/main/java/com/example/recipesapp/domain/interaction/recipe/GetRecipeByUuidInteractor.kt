@@ -7,7 +7,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import javax.inject.Inject
 
-class GetRecipeByUuidUseCase @Inject constructor(
+class GetRecipeByUuidInteractor @Inject constructor(
         private val recipeRepository: RecipeRepository
 ) {
     fun get(uuid: String): Flow<RecipeDetails> = recipeRepository.getRecipeDetailsByUuid(uuid).map {
