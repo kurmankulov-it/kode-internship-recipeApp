@@ -5,10 +5,10 @@ import com.example.recipesapp.data.database.entities.RecipeDetailsEntity
 
 data class RecipeDetailsResponseContainer(val recipe: RecipeDetailsResponse)
 
-class RecipeDetailsResponse (
+class RecipeDetailsResponse(
         val uuid: String,
         val name: String,
-        val images: List<String>?,
+        val images: List<String>,
         val lastUpdated: Int,
         val description: String?,
         val instructions: String,
@@ -17,13 +17,13 @@ class RecipeDetailsResponse (
 
 fun RecipeDetailsResponseContainer.asDataBaseModel(): RecipeDetailsEntity {
     return RecipeDetailsEntity(
-        uuid = recipe.uuid,
-        name = recipe.name,
-        images = recipe.images,
-        lastUpdated = recipe.lastUpdated,
-        description = recipe.description,
-        instructions = recipe.instructions,
-        difficulty = recipe.difficulty,
-        similar = recipe.similar
+            uuid = recipe.uuid,
+            name = recipe.name,
+            images = recipe.images,
+            lastUpdated = recipe.lastUpdated,
+            description = recipe.description,
+            instructions = recipe.instructions,
+            difficulty = recipe.difficulty,
+            similar = recipe.similar
     )
 }

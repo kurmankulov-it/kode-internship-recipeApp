@@ -18,9 +18,9 @@ object DatabaseModule {
     @Provides
     fun provideDatabase(app: Application): RecipesDatabase {
         return Room.databaseBuilder(
-            app,
-            RecipesDatabase::class.java,
-            "recipes"
+                app,
+                RecipesDatabase::class.java,
+                "recipes"
         ).build()
     }
 

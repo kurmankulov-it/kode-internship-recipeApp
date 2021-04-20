@@ -17,11 +17,12 @@ class RecipeDetailsViewModel @Inject constructor(
         private val refreshRecipeDetailsUseCase: RefreshRecipeDetailsUseCase,
         private val getRecipeByUuidInteractor: GetRecipeByUuidInteractor
 ) : ViewModel() {
-    private val _isExist : MutableLiveData<Boolean> = MutableLiveData(false)
-    val isExist : LiveData<Boolean> get() = _isExist
 
-    private val _recipe : MutableLiveData<RecipeDetails> = MutableLiveData()
-    val recipe : LiveData<RecipeDetails> get() = _recipe
+    private val _isExist: MutableLiveData<Boolean> = MutableLiveData(false)
+    val isExist: LiveData<Boolean> get() = _isExist
+
+    private val _recipe: MutableLiveData<RecipeDetails> = MutableLiveData()
+    val recipe: LiveData<RecipeDetails> get() = _recipe
 
     fun getRecipeDetails(uuid: String) {
         refreshDataFromRepository(uuid)
@@ -31,7 +32,8 @@ class RecipeDetailsViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 refreshRecipeDetailsUseCase.refresh(uuid)
-            } catch (networkError: IOException) {}
+            } catch (networkError: IOException) {
+            }
             getRecipeByUuidInteractor.exists(uuid).collect {
                 _isExist.value = it
             }

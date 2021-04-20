@@ -12,9 +12,9 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class RecipeRepository @Inject constructor(
-    private val database: RecipesDatabase,
-    private val recipeApi: RecipeApi
-){
+        private val database: RecipesDatabase,
+        private val recipeApi: RecipeApi
+) {
 
     fun getAllRecipes(): Flow<List<RecipeEntity>> {
         return database.recipeDao.getAllRecipes()

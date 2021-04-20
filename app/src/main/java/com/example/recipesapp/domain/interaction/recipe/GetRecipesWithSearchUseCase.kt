@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class GetRecipesWithSearchUseCase @Inject constructor(
-    private val recipeRepository: RecipeRepository
+        private val recipeRepository: RecipeRepository
 ) {
     fun find(search: String): Flow<List<Recipe>> = recipeRepository.getRecipesWithSearch(search).map {
         it.asDomainModel()

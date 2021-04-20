@@ -14,13 +14,13 @@ object InteractionModule {
 
     @Singleton
     @Provides
-    fun provideGetAllRecipesUseCase(recipeRepository: RecipeRepository) : GetAllRecipesUseCase {
+    fun provideGetAllRecipesUseCase(recipeRepository: RecipeRepository): GetAllRecipesUseCase {
         return GetAllRecipesUseCase(recipeRepository)
     }
 
     @Singleton
     @Provides
-    fun provideRefreshRecipesUseCase(recipeRepository: RecipeRepository) : RefreshRecipesUseCase {
+    fun provideRefreshRecipesUseCase(recipeRepository: RecipeRepository): RefreshRecipesUseCase {
         return RefreshRecipesUseCase(recipeRepository)
     }
 
