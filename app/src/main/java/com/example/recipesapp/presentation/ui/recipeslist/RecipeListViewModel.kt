@@ -67,9 +67,8 @@ class RecipeListViewModel @Inject constructor(
     }
 
     fun getRecipesWithSearch(search: String) {
-        val query = "%$search%"
         viewModelScope.launch {
-            getRecipesWithSearchUseCase.find(query).collect {
+            getRecipesWithSearchUseCase.find(search).collect {
                 _recipes.value = it
             }
         }
