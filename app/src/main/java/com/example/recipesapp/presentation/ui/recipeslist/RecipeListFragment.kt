@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.*
 import android.widget.SearchView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.recipesapp.R
@@ -16,7 +17,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 @AndroidEntryPoint
 class RecipeListFragment : Fragment() {
 
-    private val viewModel: RecipeListViewModel by viewModels()
+    private val viewModel: RecipeListViewModel by activityViewModels()
 
     private var _binding: RecipesListFragmentBinding? = null
     private val binding get() = _binding!!
@@ -87,7 +88,7 @@ class RecipeListFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId) {
             R.id.action_sorts -> {
-                val bottomSheetFragment = BottomSheetFragment(viewModel)
+                val bottomSheetFragment = BottomSheetFragment()
                 bottomSheetFragment.show(requireActivity().supportFragmentManager, "BottomSheet")
             }
         }

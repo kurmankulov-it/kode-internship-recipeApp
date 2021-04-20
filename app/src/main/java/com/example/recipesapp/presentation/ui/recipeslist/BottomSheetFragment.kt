@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
 import com.example.recipesapp.databinding.BottomSheetBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
@@ -12,7 +13,10 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 @ExperimentalCoroutinesApi
 @AndroidEntryPoint
-class BottomSheetFragment(private val vM: RecipeListViewModel) : BottomSheetDialogFragment() {
+class BottomSheetFragment() : BottomSheetDialogFragment() {
+
+    private val viewModel: RecipeListViewModel by activityViewModels()
+
     private var _binding: BottomSheetBinding? = null
     private val binding get() = _binding!!
 
@@ -30,11 +34,11 @@ class BottomSheetFragment(private val vM: RecipeListViewModel) : BottomSheetDial
         super.onViewCreated(view, savedInstanceState)
 
         binding.sortByNameLayout.setOnClickListener {
-            vM.getAllRecipesByName()
+            viewModel.getAllRecipesByName()
             dismiss()
         }
         binding.sortByDateLayout.setOnClickListener {
-            vM.getAllRecipesByLastUpdate()
+            viewModel.getAllRecipesByLastUpdate()
             dismiss()
         }
     }
