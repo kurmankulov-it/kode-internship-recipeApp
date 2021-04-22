@@ -53,4 +53,10 @@ object InteractionModule {
     fun provideGetRecipeByUuidUseCase(recipeRepository: RecipeRepository): GetRecipeByUuidInteractor {
         return GetRecipeByUuidInteractor(recipeRepository)
     }
+
+    @Singleton
+    @Provides
+    fun provideGetAnyRecipeUseCase(recipeRepository: RecipeRepository): GetAnyRecipeUseCase {
+        return GetAnyRecipeUseCase(recipeRepository)
+    }
 }

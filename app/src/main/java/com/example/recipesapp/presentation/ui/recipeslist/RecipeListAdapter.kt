@@ -50,7 +50,7 @@ class RecipeListAdapter(private val recipeClickCallBack: (Recipe) -> Unit) :
             recipeDescription.text = item.description
             recipeLastUpdate.text = SimpleDateFormat(DATE_PATTERN, Locale.getDefault()).format(item.lastUpdated)
             Glide.with(itemView)
-                    .load(item.images?.first())
+                    .load(item.images.first())
                     .into(recipeImage)
         }
 

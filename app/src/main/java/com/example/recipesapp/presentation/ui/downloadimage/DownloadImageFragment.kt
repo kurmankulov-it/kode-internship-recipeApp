@@ -1,14 +1,10 @@
 package com.example.recipesapp.presentation.ui.downloadimage
 
 import android.content.pm.PackageManager
-import android.graphics.Bitmap
-import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
-import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.view.*
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat.checkSelfPermission
@@ -21,10 +17,9 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.example.recipesapp.R
 import com.example.recipesapp.databinding.ImageDownloadFragmentBinding
+import com.example.recipesapp.util.downloadImage
 import java.io.File
-import java.io.FileOutputStream
-import java.io.OutputStream
-import java.lang.Exception
+
 
 class DownloadImageFragment : Fragment() {
 
@@ -84,7 +79,7 @@ class DownloadImageFragment : Fragment() {
                         != PackageManager.PERMISSION_GRANTED) {
                     ActivityCompat.requestPermissions(requireActivity(), arrayOf(android.Manifest.permission.WRITE_EXTERNAL_STORAGE), 1)
                 } else {
-                    saveImage()
+                    downloadImage(requireContext(), args.image)
                 }
             }
         }
@@ -99,29 +94,7 @@ class DownloadImageFragment : Fragment() {
         if (requestCode != 1)
             return
         if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            saveImage()
+            downloadImage(requireContext(), args.image)
         }
-    }
-
-    private fun saveImage() {
-        val binding = ImageDownloadFragmentBinding.bind(requireView())
-        val directory = requireContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES).toString()
-        val dirFile = File(directory)
-        dirFile.mkdirs()
-        val filename: String = String.format("%d.jpg", System.currentTimeMillis())
-        val file = File(directory, filename)
-
-        try {
-            val stream: OutputStream = FileOutputStream(file)
-            val bitmapDrawable: BitmapDrawable = binding.recipeImageDownload.drawable as BitmapDrawable
-            val bitmap = bitmapDrawable.bitmap
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream)
-            stream.flush()
-            stream.close()
-            Toast.makeText(context, "Image was successfully saved" + Uri.parse(file.absolutePath), Toast.LENGTH_SHORT).show()
-        } catch (e: Exception) {
-            Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show()
-        }
-
     }
 }
