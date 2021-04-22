@@ -1,4 +1,15 @@
 <resources>
     <string name="app_name">Recipes</string>
     <string name="recipes_list_fragment">Recipes</string>
+    <string name="no_internet_message">No internet connection. Connect to the internet and try again.</string>
+    <string name="start_download">Download started to </string>
+    <string name="action_sorts_title">Sorts</string>
+    <string name="action_search_title">Search</string>
+    <string name="action_download_title">Download</string>
+    <string name="recipe_image_content_description">Image of recipe</string>
+    <string name="event_no_internet_title">No internet</string>
+    <string name="event_no_internet_description">Try refreshing the screen when\n communication is restored.</string>
+    <string name="event_no_internet_button_title">Refresh</string>
+    <string name="action_sort_by_name_title">Sort By Name</string>
+    <string name="action_sort_by_date_title">Sort By Date</string>
 </resources>

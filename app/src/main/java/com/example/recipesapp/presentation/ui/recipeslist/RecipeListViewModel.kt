@@ -3,6 +3,7 @@ package com.example.recipesapp.presentation.ui.recipeslist
 import androidx.lifecycle.*
 import com.example.recipesapp.domain.interaction.recipe.*
 import com.example.recipesapp.domain.model.Recipe
+import com.example.recipesapp.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.*
@@ -18,27 +19,31 @@ class RecipeListViewModel @Inject constructor(
         private val refreshRecipesUseCase: RefreshRecipesUseCase,
         private val getRecipesWithSearchUseCase: GetRecipesWithSearchUseCase,
         private val getAllRecipesByNameUseCase: GetAllRecipesByNameUseCase,
-        private val getAllRecipesByLastUpdateUseCase: GetAllRecipesByLastUpdateUseCase
+        private val getAllRecipesByLastUpdateUseCase: GetAllRecipesByLastUpdateUseCase,
+        private val getAnyRecipeUseCase: GetAnyRecipeUseCase
 ) : ViewModel() {
 
-    private val _recipes: MutableLiveData<List<Recipe>> = MutableLiveData()
-
-    val recipes: LiveData<List<Recipe>> get() = _recipes
-
-    val isLoaded: MutableLiveData<Boolean> = MutableLiveData(false)
+    private val _recipes: MutableLiveData<Resource<List<Recipe>>> = MutableLiveData()
+    val recipes: LiveData<Resource<List<Recipe>>> get() = _recipes
 
     init {
-        refreshDataFromRepository()
-        getAllRecipes()
+        refresh()
     }
 
-    private fun refreshDataFromRepository() {
+    fun refresh() {
         viewModelScope.launch {
+            _recipes.value = Resource.Loading()
             try {
                 refreshRecipesUseCase.refresh()
-                isLoaded.value = true
+                getAllRecipes()
             } catch (networkError: IOException) {
-                // TODO: No internet connection notification
+                getAnyRecipeUseCase.getAnyRecipe().collect { isExist ->
+                    if (!isExist) {
+                        _recipes.value = Resource.Error("Items not found")
+                    } else {
+                        getAllRecipes()
+                    }
+                }
             }
         }
     }
@@ -46,7 +51,7 @@ class RecipeListViewModel @Inject constructor(
     fun getAllRecipes() {
         viewModelScope.launch {
             getAllRecipesUseCase.getAll().collect {
-                _recipes.value = it
+                _recipes.value = Resource.Success(it)
             }
         }
     }
@@ -54,7 +59,7 @@ class RecipeListViewModel @Inject constructor(
     fun getAllRecipesByName() {
         viewModelScope.launch {
             getAllRecipesByNameUseCase.getAll().collect {
-                _recipes.value = it
+                _recipes.value = Resource.Success(it)
             }
         }
     }
@@ -62,7 +67,7 @@ class RecipeListViewModel @Inject constructor(
     fun getAllRecipesByLastUpdate() {
         viewModelScope.launch {
             getAllRecipesByLastUpdateUseCase.getAll().collect {
-                _recipes.value = it
+                _recipes.value = Resource.Success(it)
             }
         }
     }
@@ -70,7 +75,7 @@ class RecipeListViewModel @Inject constructor(
     fun getRecipesWithSearch(search: String) {
         viewModelScope.launch {
             getRecipesWithSearchUseCase.find(search).collect {
-                _recipes.value = it
+                _recipes.value = Resource.Success(it)
             }
         }
     }

@@ -6,13 +6,13 @@
         android:icon="@drawable/ic_search_gray"
         app:actionViewClass="android.widget.SearchView"
         android:iconTint="#757575"
-        android:title="Search"
+        android:title="@string/action_search_title"
         app:showAsAction="ifRoom"/>
 
     <item
         android:id="@+id/action_sorts"
         android:icon="@drawable/ic_more_vert"
         android:iconTint="#757575"
-        android:title="Sorts"
+        android:title="@string/action_sorts_title"
         app:showAsAction="always"/>
 </menu>

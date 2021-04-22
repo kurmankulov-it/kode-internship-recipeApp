@@ -31,4 +31,7 @@ interface RecipeDao {
 
     @Query("SELECT EXISTS (SELECT 1 FROM recipe_details WHERE uuid == :uuid)")
     fun exists(uuid: String): Flow<Boolean>
+
+    @Query("SELECT EXISTS (SELECT 1 FROM recipe)")
+    fun getAnyRecipe(): Flow<Boolean>
 }

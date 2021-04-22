@@ -58,7 +58,7 @@
         android:id="@+id/recipeImage"
         android:layout_width="144dp"
         android:layout_height="132dp"
-        android:contentDescription="Image of recipe"
+        android:contentDescription="@string/recipe_image_content_description"
         android:scaleType="centerCrop"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

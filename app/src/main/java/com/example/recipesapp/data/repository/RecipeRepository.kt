@@ -54,5 +54,9 @@ class RecipeRepository @Inject constructor(
         return database.recipeDao.exists(uuid)
     }
 
+    fun getAnyRecipe(): Flow<Boolean> {
+        return database.recipeDao.getAnyRecipe()
+    }
+
 }
 

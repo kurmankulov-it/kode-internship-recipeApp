@@ -5,6 +5,7 @@ import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -13,8 +14,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.denzcoskun.imageslider.constants.ScaleTypes
 import com.denzcoskun.imageslider.interfaces.ItemClickListener
 import com.denzcoskun.imageslider.models.SlideModel
+import com.example.recipesapp.R
 import com.example.recipesapp.databinding.RecipeDetailsFragmentBinding
+import com.example.recipesapp.domain.model.RecipeDetails
 import com.example.recipesapp.util.DATE_PATTERN
+import com.example.recipesapp.util.Status
+import com.example.recipesapp.util.visible
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import java.text.SimpleDateFormat
@@ -36,34 +41,42 @@ class RecipeDetailsFragment : Fragment() {
             val action = RecipeDetailsFragmentDirections.actionRecipeDetailsFragmentSelf(it.uuid)
             findNavController().navigate(action)
         }
+
         val mLayoutManager = LinearLayoutManager(context)
         mLayoutManager.orientation = LinearLayoutManager.HORIZONTAL
         binding.recipeDetailsBrief.adapter = recipeBriefAdapter
         binding.recipeDetailsBrief.layoutManager = mLayoutManager
 
-        viewModel.isExist.observe(viewLifecycleOwner, { isExist ->
-            if (isExist) {
-                viewModel.getRecipe(args.recipeUuid)
-                binding.recipeDetailsProgressBar.visibility = View.GONE
-            }
-        })
+        binding.noInternetDialog.noInternetBtn.setOnClickListener {
+            viewModel.getRecipeDetails(args.recipeUuid)
+        }
 
         viewModel.recipe.observe(viewLifecycleOwner, { recipe ->
-            recipe?.let {
-                binding.recipeDetailImages.setImageList(loadImagesToSlider(it.images))
-                binding.recipeDetailImages.setItemClickListener(object : ItemClickListener {
-                    override fun onItemSelected(position: Int) {
-                        val action = RecipeDetailsFragmentDirections.actionRecipeDetailsFragmentToRecipeImageDownload(it.images[position])
-                        findNavController().navigate(action)
+            when (recipe.status) {
+                Status.LOADING -> {
+                    binding.recipeDetailsView.visible(false)
+                    binding.recipeDetailsProgressBar.visible(true)
+                    binding.noInternetDialog.noInternetLayout.visible(false)
+                }
+
+                Status.SUCCESS -> {
+                    binding.recipeDetailsProgressBar.visible(false)
+                    binding.recipeDetailsView.visible(true)
+                    binding.noInternetDialog.noInternetLayout.visible(false)
+                    if (recipe.data != null) {
+                        bindRecipeDetails(recipe.data)
+                        recipeBriefAdapter.briefs = recipe.data.similar
                     }
-                })
-                binding.recipeDetailName.text = it.name
-                binding.recipeDetailLastUpdate.text = SimpleDateFormat(DATE_PATTERN, Locale.getDefault()).format(it.lastUpdated)
-                binding.recipeDetailDescription.text = it.description
-                binding.recipeDetailDifficulty.rating = it.difficulty.toFloat()
-                binding.recipeDetailInstruction.text = Html.fromHtml(it.instructions)
-                recipeBriefAdapter.briefs = it.similar
+                }
+
+                Status.ERROR -> {
+                    binding.noInternetDialog.noInternetLayout.visible(true)
+                    binding.recipeDetailsProgressBar.visible(false)
+                    binding.recipeDetailsView.visible(false)
+                    Toast.makeText(requireContext(), R.string.no_internet_message, Toast.LENGTH_SHORT).show()
+                }
             }
+
         })
 
         viewModel.getRecipeDetails(args.recipeUuid)
@@ -77,5 +90,23 @@ class RecipeDetailsFragment : Fragment() {
         }
 
         return slideModels
+    }
+
+    private fun bindRecipeDetails(recipe: RecipeDetails) {
+        val binding = RecipeDetailsFragmentBinding.bind(requireView())
+        recipe.let {
+            binding.recipeDetailImages.setImageList(loadImagesToSlider(it.images))
+            binding.recipeDetailImages.setItemClickListener(object : ItemClickListener {
+                override fun onItemSelected(position: Int) {
+                    val action = RecipeDetailsFragmentDirections.actionRecipeDetailsFragmentToRecipeImageDownload(it.images[position])
+                    findNavController().navigate(action)
+                }
+            })
+            binding.recipeDetailName.text = it.name
+            binding.recipeDetailLastUpdate.text = SimpleDateFormat(DATE_PATTERN, Locale.getDefault()).format(it.lastUpdated)
+            binding.recipeDetailDescription.text = it.description
+            binding.recipeDetailDifficulty.rating = it.difficulty.toFloat()
+            binding.recipeDetailInstruction.text = Html.fromHtml(it.instructions)
+        }
     }
 }
